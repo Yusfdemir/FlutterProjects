@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:quiz_app/controllers/quiz_controller.dart';
 
 class StartScreen extends StatelessWidget {
-  const StartScreen(this.startQuiz, {super.key});
-
-  final void Function() startQuiz;
+  StartScreen({super.key});
+  final QuizController _quizController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +43,7 @@ class StartScreen extends StatelessWidget {
             child: OutlinedButton.icon(
                 icon: const Icon(Icons.arrow_right_alt),
                 style: OutlinedButton.styleFrom(foregroundColor: Colors.white),
-                onPressed: startQuiz,
+                onPressed: () => _quizController.switchScreen(),
                 label: const Text("Start Quiz")),
           )
         ],

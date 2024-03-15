@@ -1,73 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:quiz_app/data/questions.dart';
+import 'package:get/get.dart';
+import 'package:quiz_app/controllers/quiz_controller.dart';
 import 'package:quiz_app/questions_screen.dart';
 import 'package:quiz_app/result_screen.dart';
 import 'package:quiz_app/start_screen.dart';
 
-class Quiz extends StatefulWidget {
-  const Quiz({super.key});
+class Quiz extends StatelessWidget {
+  Quiz({super.key});
 
-  @override
-  State<Quiz> createState() => _QuizState();
-}
+  final _quizController = Get.put(QuizController());
 
-class _QuizState extends State<Quiz> {
-  List<String> selectedAnswers = [];
-  var activeScreen = 'start-screen';
-
-  void switchScreen() {
-    setState(() {
-      activeScreen = "question-screen";
-    });
-  }
-
-  void chooseAnswer(String answer) {
-    selectedAnswers.add(answer);
-    if (selectedAnswers.length == questions.length) {
-      setState(() {
-        activeScreen = "result-screen";
-      });
-    }
-  }
-
-  void restartQuiz() {
-    setState(() {
-      selectedAnswers = [];
-      activeScreen = "question-screen";
-    });
-  }
-
-  /* Bu Ekran değiştirmek için bir yöntem init state and lifting state up
-  Widget? activeScreen;
-  @override
-  void initState() {
-    // TODO: implement initState
-    activeScreen = StartScreen(switchScreen);
-    super.initState();
-  }
-  void switchScreen() {
-    setState(() {
-      activeScreen = const QuestionScreen();
-    });
-  }
-  */
   @override
   Widget build(BuildContext context) {
-    // if statement ile ekran değiştirme
-    Widget screenWidget = StartScreen(switchScreen);
-    if (activeScreen == "question-screen") {
-      screenWidget = QuestionScreen(
-        onSelectAnswer: chooseAnswer,
-      );
-    }
-    if (activeScreen == "result-screen") {
-      screenWidget = ResultScreen(
-        chosenAnswers: selectedAnswers,
-        onRestart: restartQuiz,
-      );
-    }
-
-    return MaterialApp(
+    return GetMaterialApp(
       home: Scaffold(
         body: Container(
           decoration: const BoxDecoration(
@@ -80,16 +25,13 @@ class _QuizState extends State<Quiz> {
               end: Alignment.bottomRight,
             ),
           ),
-          // initState and lifting state up
-          //child: activeScreen,
-
-          // ternary
-          // child: activeScreen == "start-screen"
-          //     ? StartScreen(switchScreen)
-          //     : const QuestionScreen(),
-
-          // if statement
-          child: screenWidget,
+          child: Obx(
+            () => _quizController.activeScreen.value == "start-screen"
+                ? StartScreen()
+                : _quizController.activeScreen.value == "question-screen"
+                    ? QuestionScreen()
+                    : ResultScreen(),
+          ),
         ),
       ),
     );
