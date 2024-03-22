@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:meals/screens/tabs.dart';
 
@@ -20,6 +21,6 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(theme: theme, home: const TabsScreen());
+    return GetMaterialApp(theme: theme, home: TabsScreen());
   }
 }
